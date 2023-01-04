@@ -1,151 +1,202 @@
+import { useState, useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+
+import { storage } from "./../comps/firebase";
+import { CATEGORY } from '../comps/constants'
+
+const validateInput = (input, address) => {
+    if(!input.title || ! input.description || !address.name || !address.pincode || !address.number || !address.address){
+        alert(`Please fill all input fields`);
+        return false;
+    }
+
+    if(input.category === 0) {
+        alert(`Please select correct category`);
+        return false;
+    }
+
+    const regex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[3456789]\d{9}$/gm
+    if(!regex.test(address.number)){
+        alert('Enter a correct phone number');
+        return false;
+    }
+
+    if(address.pincode.length !== 6){
+        alert('Enter a correct pincode');
+        return false;
+    }
+
+    return true;
+}
+
 const AdListing = () => {
+    const [file, setFile] = useState(null);
+    const [fileUrl, setFileUrl] = useState('');
+    const [btnDisable, setBtnDisable] = useState(false);
+    const [input, setInput] = useState({
+        title: '',
+        description: '',
+        category: 0,
+    })
+
+    const [address, setAddress] = useState({
+        name: '',
+        number: '',
+        pincode: '',
+        address: '',
+    })
+
+    const onDrop = useCallback(acceptedFiles => {
+        setFile(acceptedFiles[0])
+    }, []);
+
+    const handleSubmit = () => {
+        setBtnDisable(true);
+        if(!validateInput(input,address)){
+            setBtnDisable(false)
+            return;
+        }
+
+        if (!file) {
+            setBtnDisable(false);
+            alert(`Please select your file`);
+            return;
+        }
+
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                console.log(prog);
+            },
+            (error) =>{
+                
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setFileUrl(downloadURL);
+                    console.log("File available at", downloadURL);
+                });
+            }
+        );
+
+        const body = {
+            title: input.title,
+            description: input.description,
+            fileUrl,
+            category: input.category,
+            name: address.name,
+            number: address.number,
+            address: address.address,
+            pincode: address.pincode,
+        }
+
+        
+
+        setBtnDisable(false);
+
+    }
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setInput((prevState) => ({ ...prevState, [name]: value }));
+    }
+
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target
+        setAddress((prevState) => ({ ...prevState, [name]: value }));
+    }
+
     return (
         <section class="advt-post bg-gray py-5">
             <div class="container">
-                <form action="#!" method="POST">
-                    <fieldset class="border border-gary px-3 px-md-4 py-4 mb-5">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h3>Post Your ad</h3>
-                            </div>
-                            <div class="col-lg-6">
-                                <h6 class="font-weight-bold pt-4 pb-1">Title Of Ad:</h6>
-                                <input type="text" class="form-control bg-white" placeholder="Ad title go There" required />
-                                <h6 class="font-weight-bold pt-4 pb-1">Ad Type:</h6>
-                                <div class="row px-3">
-                                    <div class="col-lg-4 mr-lg-4 my-2 pt-2 pb-1 rounded bg-white">
-                                        <input type="radio" name="itemName" value="personal" id="personal" required />
-                                        <label for="personal" class="py-2">Personal</label>
+                
+                <fieldset class="border border-gary px-3 px-md-4 py-4 mb-5">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Post Your requirement</h3>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6 class="font-weight-bold pt-4 pb-1">Title</h6>
+                            <input type="text" class="form-control bg-white" name='title' value={input.title} onChange={handleInputChange} placeholder="Enter the title here" required />
+                            <h6 class="font-weight-bold pt-4 pb-1">Description:</h6>
+                            <textarea name="description" value={input.description} onChange={handleInputChange} class="form-control bg-white" rows="7"
+                                placeholder="Write details about your requirement" required></textarea>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6 class="font-weight-bold pt-4 pb-1">Select Your Category</h6>
+                            <select name="category" value={input.category} onChange={handleInputChange} class="form-control w-100 bg-white" id="inputGroupSelect">
+                                <option value="0">Select category</option>
+
+                                {CATEGORY.map((cat) => {
+                                    return (
+                                        <option key={cat.id} value={cat.id}>{cat.val}</option>
+                                    )
+                                })}
+                            </select>
+
+                            <h6 class="font-weight-bold pt-4 pb-1">Drop your file here:</h6>
+
+                            <div class="choose-file text-center my-4 py-4 rounded bg-white">
+
+                                <label for="file-upload">
+                                    <div {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        {file ?
+                                            <span style={{ height: '128px' }} class="d-block font-weight-bold text-dark">{file?.name}</span>
+                                            :
+                                            <>
+                                                <span class="d-block font-weight-bold text-dark">Drop files anywhere to upload</span>
+                                                <span class="d-block">or</span>
+                                                <span class="d-block btn bg-primary text-white my-3 select-files">Select files</span>
+                                                <span class="d-block">Maximum upload file size: 500 KB</span>
+                                            </>
+                                        }
+
                                     </div>
-                                    <div class="col-lg-4 mr-lg-4 my-2 pt-2 pb-1 rounded bg-white ">
-                                        <input type="radio" name="itemName" value="business" id="business" required />
-                                        <label for="business" class="py-2">Business</label>
-                                    </div>
-                                </div>
-                                <h6 class="font-weight-bold pt-4 pb-1">Description:</h6>
-                                <textarea name="" id="" class="form-control bg-white" rows="7"
-                                    placeholder="Write details about your product" required></textarea>
-                            </div>
-                            <div class="col-lg-6">
-                                <h6 class="font-weight-bold pt-4 pb-1">Select Ad Category:</h6>
-                                <select name="" class="form-control w-100 bg-white" id="inputGroupSelect">
-                                    <option value="1">Select category</option>
-                                    <option value="2">Laptops</option>
-                                    <option value="3">iphone</option>
-                                    <option value="4">microsoft</option>
-                                    <option value="5">monitors</option>
-                                    <option value="6">11inch Macbook Air</option>
-                                    <option value="7">Study Table Combo</option>
-                                    <option value="8">11inch Macbook Air</option>
-                                    <option value="9">Study Table Combo</option>
-                                    <option value="10">11inch Macbook Air</option>
-                                </select>
-                                <div class="price">
-                                    <h6 class="font-weight-bold pt-4 pb-1">Item Price ($ USD):</h6>
-                                    <div class="row px-3">
-                                        <div class="col-lg-4 rounded my-2 px-0">
-                                            <input type="text" name="price" class="form-control bg-white" placeholder="Price" id="price" />
-                                        </div>
-                                        <div class="col-lg-4 ml-lg-4 my-2 pt-2 pb-1 rounded bg-white ">
-                                            <input type="radio" name="itemName" value="Negotiable" id="Negotiable" />
-                                            <label for="Negotiable" class="py-2">Negotiable</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="choose-file text-center my-4 py-4 rounded bg-white">
-                                    <label for="file-upload">
-                                        <span class="d-block font-weight-bold text-dark">Drop files anywhere to upload</span>
-                                        <span class="d-block">or</span>
-                                        <span class="d-block btn bg-primary text-white my-3 select-files">Select files</span>
-                                        <span class="d-block">Maximum upload file size: 500 KB</span>
-                                        <input type="file" class="form-control-file d-none" id="file-upload" name="file" />
-                                    </label>
-                                </div>
+                                </label>
                             </div>
                         </div>
-                    </fieldset>
-
-                    <fieldset class="border px-3 px-md-4 py-4 my-5 seller-information bg-gray">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h3>Seller Information</h3>
-                            </div>
-                            <div class="col-lg-6">
-                                <h6 class="font-weight-bold pt-4 pb-1">Contact Name:</h6>
-                                <input type="text" placeholder="Contact name" class="form-control bg-white" required />
-                                <h6 class="font-weight-bold pt-4 pb-1">Contact Number:</h6>
-                                <input type="text" placeholder="Contact Number" class="form-control bg-white" required />
-                            </div>
-                            <div class="col-lg-6">
-                                <h6 class="font-weight-bold pt-4 pb-1">Contact Name:</h6>
-                                <input type="email" placeholder="name@yourmail.com" class="form-control bg-white" required />
-                                <h6 class="font-weight-bold pt-4 pb-1">Contact Name:</h6>
-                                <input type="text" placeholder="Your address" class="form-control bg-white" required />
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset class="border bg-white px-3 px-md-4 py-4 my-5 ad-feature bg-gray">
-                        <div class="row">
-                            <div class="col-lg-12">
-
-                                <h3 class="pb-3">Make Your Ad Featured
-                                    <span class="float-right font-weight-normal text-success" data-toggle="tooltip" data-placement="top" title="Autem, architecto quisquam distinctio totam aut voluptatibus placeat ut nobis molestias rerum!">What is featured ad ?</span>
-                                </h3>
-
-                            </div>
-                            <div class="col-lg-6 my-3">
-                                <span class="mb-3 d-block">Premium Ad Options:</span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="regular-ad" name="adfeature" />
-                                        <label for="regular-ad" class="font-weight-bold text-dark py-1">Regular Ad</label>
-                                        <span>$00.00</span>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="Featured-Ads" name="adfeature" />
-                                        <label for="Featured-Ads" class="font-weight-bold text-dark py-1">Top Featured
-                                            Ads</label>
-                                        <span>$59.00</span>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="urgent-Ads" name="adfeature" />
-                                        <label for="urgent-Ads" class="font-weight-bold text-dark py-1">Urgent Ads</label>
-                                        <span>$79.00</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-6 my-3">
-                                <span class="mb-3 d-block">Please select the preferred payment method:</span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="bank-transfer" name="adfeature" />
-                                        <label for="bank-transfer" class="font-weight-bold text-dark py-1">Direct Bank
-                                            Transfer</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="Cheque-Payment" name="adfeature" />
-                                        <label for="Cheque-Payment" class="font-weight-bold text-dark py-1">Cheque
-                                            Payment</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="Credit-Card" name="adfeature" />
-                                        <label for="Credit-Card" class="font-weight-bold text-dark py-1">Credit Card</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <div class="checkbox d-inline-flex">
-                        <input type="checkbox" id="terms-&-condition" class="mt-1" />
-                        <label for="terms-&-condition" class="ml-2">By click you must agree with our
-                            <span> <a class="text-success" href="terms-condition.html">Terms & Condition and Posting
-                                Rules.</a></span>
-                        </label>
                     </div>
-                    <button type="submit" class="btn btn-primary d-block mt-2">Post Your Ad</button>
-                </form>
+                </fieldset>
+
+                <fieldset class="border px-3 px-md-4 py-4 my-5 seller-information bg-gray">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Delivery Address</h3>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6 class="font-weight-bold pt-4 pb-1">Contact Name:</h6>
+                            <input name='name' value={address.name} onChange={handleAddressChange} type="text" placeholder="Enter your name" class="form-control bg-white" required />
+                            <h6 class="font-weight-bold pt-4 pb-1">Contact Number:</h6>
+                            <input name='number' value={address.number} onChange={handleAddressChange} type="text" placeholder="Enter your contact number" class="form-control bg-white" required />
+                        </div>
+                        <div class="col-lg-6">
+                            <h6 class="font-weight-bold pt-4 pb-1">Contact Pincode</h6>
+                            <input name='pincode' value={address.pincode} onChange={handleAddressChange} type="text" placeholder="XX-XX-XX" class="form-control bg-white" required />
+                            <h6 class="font-weight-bold pt-4 pb-1">Contact Address:</h6>
+                            <input name='address' value={address.address} onChange={handleAddressChange} type="text" placeholder="Enter your full delivery address" class="form-control bg-white" required />
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="price">
+                    <h6 class="font-weight-bold pt-4 pb-1">Total Price</h6>
+                    <div class="row px-3">
+                        <div class="col-lg-4 rounded px-0">
+                            <div>₹ 550</div>
+                        </div>
+                    </div>
+                </div>
+                <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-primary d-block mt-5">Place your order</button>
+
             </div>
         </section>
     )

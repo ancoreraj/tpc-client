@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import HeroArea from '../comps/HeroArea'
@@ -6,7 +7,12 @@ import Category from '../comps/Category'
 import { APP_URL } from '../comps/constants'
 
 export default function Home() {
-  console.log(APP_URL)
+
+  useEffect(()=> {
+    let userData = JSON.parse(localStorage.getItem('userData'))
+    let token = localStorage.getItem('token')
+  },[])
+  
   return (
     <>
       <HeroArea />
