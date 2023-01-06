@@ -47,7 +47,7 @@ export default function Login() {
             router.push('/')
 
         }catch(err){
-            alert(err.response.data.error)
+            alert(err)
         }
     }
 

@@ -19,7 +19,7 @@ const Header = () => {
                                     <li class="nav-item @@home">
                                         <a class="nav-link" href="/">Home</a>
                                     </li>
-                                    <li class="nav-item dropdown dropdown-slide @@dashboard">
+                                    {/* <li class="nav-item dropdown dropdown-slide @@dashboard">
                                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">Dashboard<span><i class="fa fa-angle-down"></i></span>
                                         </a>
 
@@ -40,41 +40,15 @@ const Header = () => {
                                                 </ul>
                                             </li>
                                         </ul>
+                                    </li> */}
+                                    <li class="nav-item @@home">
+                                        <a class="nav-link" href="/freelance">Freelance</a>
                                     </li>
-                                    <li class="nav-item dropdown dropdown-slide @@pages">
-                                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Pages <span><i class="fa fa-angle-down"></i></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item @@about" href="about-us.html">About Us</a></li>
-                                            <li><a class="dropdown-item @@contact" href="contact-us.html">Contact Us</a></li>
-                                            <li><a class="dropdown-item @@profile" href="user-profile.html">User Profile</a></li>
-                                            <li><a class="dropdown-item @@404" href="404.html">404 Page</a></li>
-                                             <li><a class="dropdown-item @@package" href="package.html">Package</a></li> 
-                                             <li><a class="dropdown-item @@singlePage" href="single.html">Single Page</a></li>
-                                            <li><a class="dropdown-item @@store" href="store.html">Store Single</a></li>
-                                            <li><a class="dropdown-item @@blog" href="blog.html">Blog</a></li>
-                                            <li><a class="dropdown-item @@singleBlog" href="single-blog.html">Blog Details</a></li>
-                                            <li><a class="dropdown-item @@terms" href="terms-condition.html">Terms &amp; Conditions</a></li> 
-                                        </ul>
+                                    <li class="nav-item @@home">
+                                        <a class="nav-link" href="/about">About Us</a>
                                     </li>
-                                    <li class="nav-item dropdown dropdown-slide @@listing">
-                                        <a class="nav-link dropdown-toggle" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Listing <span><i class="fa fa-angle-down"></i></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                             <li><a class="dropdown-item @@category" href="category.html">Ad-Gird View</a></li>
-                                            <li><a class="dropdown-item @@listView" href="ad-list-view.html">Ad-List View</a></li> 
-
-                                            <li class="dropdown dropdown-submenu dropleft">
-                                                <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0201" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-                                                <ul class="dropdown-menu" aria-labelledby="dropdown0201">
-                                                    <li><a class="dropdown-item" href="/">Submenu 01</a></li>
-                                                    <li><a class="dropdown-item" href="/">Submenu 02</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
+                                    <li class="nav-item @@home">
+                                        <a class="nav-link" href="/contact">Contact Us</a>
                                     </li>
                                 </ul>
                                 <ul class="navbar-nav ml-auto mt-10">

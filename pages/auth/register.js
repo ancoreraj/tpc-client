@@ -49,6 +49,8 @@ const Register = () => {
         }
 
     }
+
+    console.log(input)
     return (
         <section className="login py-5 border-top-1">
             <div className="container">

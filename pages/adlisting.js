@@ -1,21 +1,25 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import { storage } from "./../comps/firebase";
-import { CATEGORY } from '../comps/constants'
+import { APP_URL, CATEGORY, makeid, RAZORPAY_KEY } from '../comps/constants'
+import axios from 'axios';
 
-const validateInput = (input, address) => {
+const validateInput = (input, address, file) => {
     if(!input.title || ! input.description || !address.name || !address.pincode || !address.number || !address.address){
         alert(`Please fill all input fields`);
         return false;
     }
 
-    if(input.category === 0) {
+    if(input.category === 0) {  
         alert(`Please select correct category`);
         return false;
     }
-
+    if (!file) {
+        alert(`Please select your file`);
+        return false;
+    }
     const regex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[3456789]\d{9}$/gm
     if(!regex.test(address.number)){
         alert('Enter a correct phone number');
@@ -32,39 +36,45 @@ const validateInput = (input, address) => {
 
 const AdListing = () => {
     const [file, setFile] = useState(null);
-    const [fileUrl, setFileUrl] = useState('');
     const [btnDisable, setBtnDisable] = useState(false);
     const [input, setInput] = useState({
         title: '',
         description: '',
-        category: 0,
+        category: '',
     })
-
     const [address, setAddress] = useState({
         name: '',
         number: '',
         pincode: '',
         address: '',
     })
+    const [price, setPrice] = useState('0');
+    const [uploadPercent, setUploadPercent] = useState(0);
+
+    useEffect(()=>{
+        CATEGORY.map((cat)=>{
+            if(cat.id === input.category){
+                setPrice(cat.price);
+            }
+        })
+        if(input.category === '0'){
+            setPrice('0')
+        }
+    },[input])
 
     const onDrop = useCallback(acceptedFiles => {
         setFile(acceptedFiles[0])
     }, []);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setBtnDisable(true);
-        if(!validateInput(input,address)){
-            setBtnDisable(false)
-            return;
-        }
-
-        if (!file) {
+        if(!validateInput(input,address,file)){
             setBtnDisable(false);
-            alert(`Please select your file`);
             return;
         }
 
-        const sotrageRef = ref(storage, `files/${file.name}`);
+        let userData = JSON.parse(localStorage.getItem('userData'))
+        const sotrageRef = ref(storage, `orderFiles/${userData.email}/${file.name}-${makeid()}`);
         const uploadTask = uploadBytesResumable(sotrageRef, file);
 
         uploadTask.on(
@@ -73,36 +83,62 @@ const AdListing = () => {
                 const prog = Math.round(
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
-                console.log(prog);
+                setUploadPercent(prog);
             },
             (error) =>{
-                
+                console.log(error)
             },
             () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setFileUrl(downloadURL);
-                    console.log("File available at", downloadURL);
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                    const body = {
+                        title: input.title,
+                        description: input.description,
+                        fileUrl: downloadURL,
+                        category: input.category,
+                        name: address.name,
+                        number: address.number,
+                        address: address.address,
+                        pincode: address.pincode,
+                    }
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+                    }
+                    try{
+                        const {data} = await axios.post(`${APP_URL}/create-order`, body, {headers});
+                        console.log(data);
+
+                        const optionsRazorpay = {
+                            key: RAZORPAY_KEY,
+                            amount: data.razorpayOrder.amount,
+                            currency: "INR",
+                            name: "The Complete Project",
+                            order_id: data.razorpayOrder.id,
+                            callback_url: `http://localhost:5000/payment-verification?orderId=${data.orderId}`,
+                            prefill: {
+                                name: address.name,
+                                email: userData.email,
+                                contact: address.number
+                            },
+                            notes: {
+                                address: "Razorpay Corporate Office"
+                            },
+                            theme: {
+                                color: "#3399cc"
+                            }
+                        };
+
+                        const razor = new window.Razorpay(optionsRazorpay);
+                        razor.open();
+
+                    }catch(err){
+                        alert('err')
+                    }
                 });
+
             }
         );
-
-        const body = {
-            title: input.title,
-            description: input.description,
-            fileUrl,
-            category: input.category,
-            name: address.name,
-            number: address.number,
-            address: address.address,
-            pincode: address.pincode,
-        }
-
-        
-
-        setBtnDisable(false);
-
     }
-
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
     const handleInputChange = (e) => {
@@ -116,6 +152,7 @@ const AdListing = () => {
     }
 
     return (
+        <>
         <section class="advt-post bg-gray py-5">
             <div class="container">
                 
@@ -191,15 +228,15 @@ const AdListing = () => {
                     <h6 class="font-weight-bold pt-4 pb-1">Total Price</h6>
                     <div class="row px-3">
                         <div class="col-lg-4 rounded px-0">
-                            <div>₹ 550</div>
+                            <div>₹ {price}</div>
                         </div>
                     </div>
                 </div>
-                <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-primary d-block mt-5">Place your order</button>
-
+                <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-primary d-block mt-5">{uploadPercent === 0 ? '' : uploadPercent} {' '}Place your order</button>
             </div>
         </section>
+        </>
     )
-}
+};
 
 export default AdListing
