@@ -4,7 +4,13 @@ import Image from 'next/image'
 import HeroArea from '../comps/HeroArea'
 import Products from '../comps/Products'
 import Category from '../comps/Category'
-import { APP_URL } from '../comps/constants'
+import { APP_URL, CATEGORY } from '../comps/constants'
+
+const products = CATEGORY.map((cat) => ({
+  ...cat, 
+  img : "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80", 
+
+}))
 
 export default function Home() {
 
@@ -23,26 +29,23 @@ export default function Home() {
           <div class="row">
             <div class="col-md-12">
               <div class="section-title">
-                <h2>Trending Adds</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, magnam.</p>
+                <h2>The Project Complete</h2>
+                <p>We will deliver awesome handwritten notes/assignments at your door steps.</p>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-12">
-              <div class="trending-ads-slide">
-                <div class="col-sm-12 col-lg-4">
-                  <Products />
-                </div>
-                <div class="col-sm-12 col-lg-4">
-                  <Products />
-                </div>
-                <div class="col-sm-12 col-lg-4">
-                  <Products />
-                </div>
-                <div class="col-sm-12 col-lg-4">
-                  <Products />
-                </div>
+              <div class="trending-ads-slide d-flex flex-wrap">
+                {
+                  products.map((product) => {
+                    return (
+                      <div class="col-sm-12 col-lg-4" >
+                        <Products product={product} />
+                      </div>
+                    )
+                  })
+                }
               </div>
             </div>
           </div>
@@ -54,9 +57,9 @@ export default function Home() {
           <div class="row justify-content-md-center text-center">
             <div class="col-md-8">
               <div class="content-holder">
-                <h2>Start today to get your notes and Assignment done</h2>
+                <h2>List today and get your notes and Assignment done in the best way possible.</h2>
                 <ul class="list-inline mt-30">
-                  <li class="list-inline-item"><a class="btn btn-secondary" href="category.html">Browser Listing</a></li>
+                  <li class="list-inline-item"><a class="btn btn-success add-button" href="/adlisting">Add Listing</a></li>
                 </ul>
               </div>
             </div>

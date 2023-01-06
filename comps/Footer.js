@@ -13,13 +13,11 @@ const Footer = () => {
 
                                 {/* <img src="images/logo-footer.png" alt="logo">  */}
 
-                                <p class="alt-color">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                                    laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                <p class="alt-color">Welcome to our e-commerce website where you can find a wide range of academic resources including assignments, books, and notes. Whether you're a student looking for study materials or a teacher seeking new curriculum resources, we have something for everyone.</p>
                             </div>
                         </div>
 
-                        <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
+                        {/* <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
                             <div class="block">
                                 <h4>Site Pages</h4>
                                 <ul>
@@ -30,21 +28,16 @@ const Footer = () => {
                                     <li><a href="terms-condition.html">Terms & Conditions</a></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0 col-6 mb-4 mb-md-0">
                             <div class="block">
-                                <h4>Admin Pages</h4>
+                                <h4>Navigate</h4>
                                 <ul>
-                                    <li><a href="category.html">Category</a></li>
-                                    <li><a href="single.html">Single Page</a></li>
-                                    <li><a href="store.html">Store Single</a></li>
-                                    <li><a href="single-blog.html">Single Post</a>
-                                    </li>
-                                    <li><a href="blog.html">Blog</a></li>
-
-
-
+                                    <li><a href="/adlisting">Add Listing</a></li>
+                                    <li><a href="/freelance">Freelance</a></li>
+                                    <li><a href="/about">About Us</a></li>
+                                    <li><a href="/contact">Contact Us</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -53,15 +46,14 @@ const Footer = () => {
 
                             <div class="block-2 app-promotion">
                                 <div class="mobile d-flex  align-items-center">
-                                    <a href="index.html">
-
+                                    {/* <a href="index.html">
                                         <img src="images/footer/phone-icon.png" alt="mobile-icon" />
-                                    </a>
-                                    <p class="mb-0">Get the Dealsy Mobile App and Save more</p>
+                                    </a> */}
+                                    <p class="mb-0">Get your assignment and notes done.</p>
                                 </div>
                                 <div class="download-btn d-flex my-3">
-                                    <a href="index.html"><img src="images/apps/google-play-store.png" class="img-fluid" alt="" /></a>
-                                    <a href="index.html" class=" ml-3"><img src="images/apps/apple-app-store.png" class="img-fluid" alt="" /></a>
+                                    <a href="index.html"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" class="img-fluid" alt="" /></a>
+                                    
                                 </div>
                             </div>
                         </div>

@@ -232,7 +232,7 @@ const AdListing = () => {
                         </div>
                     </div>
                 </div>
-                <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-primary d-block mt-5">{uploadPercent === 0 ? '' : uploadPercent} {' '}Place your order</button>
+                <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-success d-block mt-5">{uploadPercent === 0 ? '' : uploadPercent} {' '}Place your order</button>
             </div>
         </section>
         </>
