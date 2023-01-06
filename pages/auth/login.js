@@ -1,11 +1,21 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios";
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify';
 
 import { APP_URL, isEmail } from "../../comps/constants";
 
 export default function Login() {
     const router = useRouter();
+
+    useEffect(()=>{
+        let token = localStorage.getItem('token')
+        if(token){
+            toast('You are already logged in');
+            router.push('/');
+            return;
+        }
+    },[]);
 
     const [input, setInput] = useState({
         email: "",
@@ -19,12 +29,12 @@ export default function Login() {
 
     const handleSubmit = async () => {
         if(!isEmail(input.email)){
-            alert('Enter a valid email id')
+            toast("Enter a valid email id");
             return;
         }
 
         if(input.password.length < 1){
-            alert('Password length should be more than 8 characters')
+            toast('Password length should be more than 8 characters')
             return;
         }
 
@@ -43,11 +53,11 @@ export default function Login() {
             localStorage.setItem('userData', userData)
             localStorage.setItem('token', token)
             
-            alert('You are now logged In')
+            toast('You are now logged In')
             router.push('/')
 
         }catch(err){
-            alert(err)
+            toast("Something error happened, please try again.")
         }
     }
 

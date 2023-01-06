@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useRouter } from 'next/router'
 import axios from "axios"
+import { toast } from 'react-toastify';
 
 import { APP_URL, isEmail } from "../../comps/constants"
 
@@ -21,17 +22,17 @@ const Register = () => {
     const handleSubmit = async () => {
 
         if(!isEmail(input.email)){
-            alert('Enter a valid email id')
+            toast('Enter a valid email id')
             return;
         }
 
         if(input.password !== input.cPassword){
-            alert('Password do not match')
+            toast('Password do not match')
             return;
         }
 
         if(input.password.length < 8){
-            alert('Password length should be more than 8 characters')
+            toast('Password length should be more than 8 characters')
             return;
         }
 
@@ -41,16 +42,15 @@ const Register = () => {
                 password: input.password
             })
 
-            alert("You are registered, please verify your email then login.")
+            toast("You are registered, please verify your email then login.")
             router.push("/auth/login")
 
         }catch(err) {
-            alert(err.response.data.error)
+            toast("Something error happened, please try again.")
         }
 
     }
 
-    console.log(input)
     return (
         <section className="login py-5 border-top-1">
             <div className="container">

@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(()=> {
     let userData = JSON.parse(localStorage.getItem('userData'))
-    let token = localStorage.getItem('token')
+    let token = JSON.parse(localStorage.getItem('token'))
 
     console.log(token, userData)
   },[])

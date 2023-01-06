@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 
 const Header = () => {
+    const [token, setToken] = useState('');
+
+    const logout = () => {
+        localStorage.clear();
+        toast('You are now logged out');
+        router.push('/')
+    }
+
+    useEffect(() => {
+        let getToken = JSON.parse(localStorage.getItem('token'))
+        setToken(getToken);
+    },[logout]);
+
+    
     return (
         <header>
             <div class="container">
@@ -8,7 +23,7 @@ const Header = () => {
                     <div class="col-md-12">
                         <nav class="navbar navbar-expand-lg navbar-light navigation">
                             <a class="navbar-brand" href="/">
-                                 <img src="images/logo.png" alt="" /> 
+                                <img src="images/logo.png" alt="" />
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,9 +67,16 @@ const Header = () => {
                                     </li>
                                 </ul>
                                 <ul class="navbar-nav ml-auto mt-10">
-                                    <li class="nav-item">
-                                        <a class="nav-link login-button" href="/auth/login">Login</a>
-                                    </li>
+                                    {
+                                        token ?
+                                            (<li class="nav-item">
+                                                <button class="nav-link login-button" onClick={logout}>Logout</button>
+                                            </li>)
+                                            :
+                                            (<li class="nav-item">
+                                                <a class="nav-link login-button" href="/auth/login">Login</a>
+                                            </li>)
+                                    }
                                     <li class="nav-item">
                                         <a class="nav-link text-white add-button" href="/adlisting"><i class="fa fa-plus-circle"></i> Add Listing</a>
                                     </li>

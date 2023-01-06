@@ -1,6 +1,7 @@
 import { useState } from "react"
 import axios from "axios";
 import { APP_URL } from "../comps/constants";
+import { toast } from 'react-toastify';
 
 const Contact = () => {
     const [input, setInput] = useState({
@@ -17,7 +18,7 @@ const Contact = () => {
 
     const handleSubmit = async () => {
         if(!input.name || !input.email || !input.message || !input.contactNo){
-            alert('Please fill all the input fields');
+            toast('Please fill all the input fields');
             return;
         }
         try{
@@ -28,11 +29,10 @@ const Contact = () => {
                 contactNo: input.contactNo
             })
 
-            alert(`Recieved your message, we will get back to you soon`)
+            toast(`Recieved your message, we will get back to you soon`)
         }catch(err){
-            alert(err)
+            toast("Something error happened, please try again.")
         }
-
     }
 
     return (

@@ -1,33 +1,35 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { useDropzone } from 'react-dropzone'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { toast } from 'react-toastify';
 
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./../comps/firebase";
 import { APP_URL, CATEGORY, makeid, RAZORPAY_KEY } from '../comps/constants'
 import axios from 'axios';
 
 const validateInput = (input, address, file) => {
     if(!input.title || ! input.description || !address.name || !address.pincode || !address.number || !address.address){
-        alert(`Please fill all input fields`);
+        toast(`Please fill all input fields`);
         return false;
     }
 
     if(input.category === 0) {  
-        alert(`Please select correct category`);
+        toast(`Please select correct category`);
         return false;
     }
     if (!file) {
-        alert(`Please select your file`);
+        toast(`Please select your file`);
         return false;
     }
     const regex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[3456789]\d{9}$/gm
     if(!regex.test(address.number)){
-        alert('Enter a correct phone number');
+        toast('Enter a correct phone number');
         return false;
     }
 
     if(address.pincode.length !== 6){
-        alert('Enter a correct pincode');
+        toast('Enter a correct pincode');
         return false;
     }
 
@@ -35,6 +37,17 @@ const validateInput = (input, address, file) => {
 }
 
 const AdListing = () => {
+    const router = useRouter();
+
+    useEffect(()=>{
+        let token = localStorage.getItem('token')
+        if(!token){
+            toast('Please Login before you submit your listing.');
+            router.push('/auth/login');
+            return;
+        }
+    },[])
+
     const [file, setFile] = useState(null);
     const [btnDisable, setBtnDisable] = useState(false);
     const [input, setInput] = useState({
@@ -86,7 +99,7 @@ const AdListing = () => {
                 setUploadPercent(prog);
             },
             (error) =>{
-                console.log(error)
+                toast('Something Error Happened, please try again')
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -106,7 +119,6 @@ const AdListing = () => {
                     }
                     try{
                         const {data} = await axios.post(`${APP_URL}/create-order`, body, {headers});
-                        console.log(data);
 
                         const optionsRazorpay = {
                             key: RAZORPAY_KEY,
@@ -132,10 +144,9 @@ const AdListing = () => {
                         razor.open();
 
                     }catch(err){
-                        alert('err')
+                        toast('Something error happened, please try again.');
                     }
                 });
-
             }
         );
     }
