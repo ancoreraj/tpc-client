@@ -35,7 +35,7 @@ const Footer = () => {
                                 <h4>Navigate</h4>
                                 <ul>
                                     <li><a href="/adlisting">Add Listing</a></li>
-                                    <li><a href="/freelance">Freelance</a></li>
+                                    <li><a href="/freelance">Partner</a></li>
                                     <li><a href="/about">About Us</a></li>
                                     <li><a href="/contact">Contact Us</a></li>
                                 </ul>
@@ -71,10 +71,9 @@ const Footer = () => {
                         </div>
                         <div class="col-lg-6">
                             <ul class="social-media-icons text-center text-lg-right">
-                                <li><a class="fa fa-facebook" href="https://www.facebook.com/themefisher"></a></li>
-                                <li><a class="fa fa-twitter" href="https://www.twitter.com/themefisher"></a></li>
-                                <li><a class="fa fa-pinterest-p" href="https://www.pinterest.com/themefisher"></a></li>
-                                <li><a class="fa fa-github-alt" href="https://www.github.com/themefisher"></a></li>
+                                <li><a class="fa fa-facebook" href="https://www.facebook.com/themefisher">Facebook</a></li>
+                                <li><a class="fa fa-twitter" href="https://www.twitter.com/themefisher">Twitter</a></li>
+                                <li><a class="fa fa-github-alt" href="https://www.github.com/themefisher">Instagram</a></li>
                             </ul>
                         </div>
                     </div>

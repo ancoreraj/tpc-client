@@ -39,13 +39,13 @@ export default function Login() {
         }
 
         try{
-            const {data} = await axios.post(`${APP_URL}/auth/login`, {
+            const response = await axios.post(`${APP_URL}/auth/login`, {
                 email: input.email,
                 password: input.password
             })
 
-            let userData = data.user
-            let token = data.token
+            let userData = response.data.user
+            let token = response.data.token
 
             userData = JSON.stringify(userData)
             token = JSON.stringify(token)
@@ -57,7 +57,7 @@ export default function Login() {
             router.push('/')
 
         }catch(err){
-            toast("Something error happened, please try again.")
+            toast(err)
         }
     }
 

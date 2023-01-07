@@ -76,7 +76,12 @@ const AdListing = () => {
     },[input])
 
     const onDrop = useCallback(acceptedFiles => {
-        setFile(acceptedFiles[0])
+        const file = acceptedFiles[0];
+        if(file.size >= 15*1000000){
+            toast("Please upload file of size less than 15 MB");
+        }else{
+            setFile(acceptedFiles[0])
+        }
     }, []);
 
     const handleSubmit = async () => {

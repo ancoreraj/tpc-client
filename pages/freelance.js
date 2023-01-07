@@ -41,6 +41,7 @@ const FreeLance = () => {
 
         try{
             const {data} = await axios.post(`${APP_URL}/add-freelance`, body , {headers});
+            router.push('/');
             toast('Congratulatins, you are now added as a freelance');
 
         }catch(err){

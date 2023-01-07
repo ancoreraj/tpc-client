@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 
 const Header = () => {
+    const router = useRouter();
     const [token, setToken] = useState('');
 
     const logout = () => {
@@ -57,7 +59,7 @@ const Header = () => {
                                         </ul>
                                     </li> */}
                                     <li class="nav-item @@home">
-                                        <a class="nav-link" href="/freelance">Freelance</a>
+                                        <a class="nav-link" href="/freelance">Partner</a>
                                     </li>
                                     <li class="nav-item @@home">
                                         <a class="nav-link" href="/about">About Us</a>
