@@ -1,26 +1,33 @@
 import { useEffect } from 'react'
-import Head from 'next/head'
-import Image from 'next/image'
+import { useRouter } from 'next/router';
 import HeroArea from '../comps/HeroArea'
 import Products from '../comps/Products'
 import Category from '../comps/Category'
 import { APP_URL, CATEGORY } from '../comps/constants'
+import { toast } from 'react-toastify'
 
 const products = CATEGORY.map((cat) => ({
-  ...cat, 
-  img : "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80", 
+  ...cat,
+  img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
 
 }))
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    if(!router) return;
+    let orderPlaced = router.query.orderPlaced
+    console.log(orderPlaced)
+    if (orderPlaced) {
+      if (orderPlaced === 'true') {
+        toast("Your order is now placed");
+      }
+    }
 
-  useEffect(()=> {
     let userData = JSON.parse(localStorage.getItem('userData'))
     let token = JSON.parse(localStorage.getItem('token'))
+  }, [router])
 
-    console.log(token, userData)
-  },[])
-  
   return (
     <>
       <HeroArea />

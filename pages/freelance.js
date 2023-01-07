@@ -1,10 +1,58 @@
+import { useState, useEffect } from "react"
+import axios from "axios";
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify';
+
+import { APP_URL, isEmail } from "../comps/constants";
+import { CATEGORY } from "../comps/constants";
 
 const FreeLance = () => {
+    const router = useRouter();
+    useEffect(() => {
+        let token = localStorage.getItem('token')
+        if (!token) {
+            toast('Please Login before you submit your listing.');
+            router.push('/auth/login');
+            return;
+        }
+    }, []);
+
+    const [input, setInput] = useState({
+        name: '',
+        contactNo: '',
+        category: ''
+    })
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setInput((prevState) => ({ ...prevState, [name]: value }));
+    }
+
+    const handleSubmit = async () => {
+        const headers = {
+            'Content-Type': 'application/json',
+            'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+        }
+        const body = {
+            contactNo: input.contactNo,
+            category: input.category,
+            name: input.name
+        }
+
+        try{
+            const {data} = await axios.post(`${APP_URL}/add-freelance`, body , {headers});
+            toast('Congratulatins, you are now added as a freelance');
+
+        }catch(err){
+            toast('Something error happened, please try again.');
+        }
+    }
+
     return (
         <section class="user-profile section">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4">
+                    {/* <div class="col-lg-4">
                         <div class="sidebar">
                             <div class="widget user">
                                 <div class="image d-flex justify-content-center">
@@ -21,48 +69,61 @@ const FreeLance = () => {
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div class="col-lg-8">
                         <div class="widget welcome-message">
-                            <h2>Edit profile</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</p>
+                            <h2>Join us as a <b>Freelancer</b></h2>
+                            <p>Are you a talented freelancer looking for new opportunities? Join our team and work on exciting projects with a dynamic and supportive group of professionals. We offer competitive rates and the opportunity to collaborate with a diverse group of clients. Apply now to become a part of our growing team of freelancers.</p>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
                                 <div class="widget personal-info">
-                                    <h3 class="widget-header user">Edit Personal Information</h3>
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="first-name">First Name</label>
-                                            <input type="text" class="form-control" id="first-name" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="last-name">Last Name</label>
-                                            <input type="text" class="form-control" id="last-name" />
-                                        </div>
-                                        <div class="form-group choose-file d-inline-flex">
-                                            <i class="fa fa-user text-center px-3"></i>
-                                            <input type="file" class="form-control-file mt-2 pt-1" id="input-file" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="comunity-name">Comunity Name</label>
-                                            <input type="text" class="form-control" id="comunity-name" />
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label" for="hide-profile">
-                                                <input class="form-check-input mt-1" type="checkbox" value="" id="hide-profile" />
-                                                Hide Profile from Public/Comunity
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="zip-code">Zip Code</label>
-                                            <input type="text" class="form-control" id="zip-code" />
-                                        </div>
-                                        <button class="btn btn-transparent">Save My Changes</button>
-                                    </form>
+                                    <h3 class="widget-header user">Add Personal Information</h3>
+                                    <div class="form-group">
+                                        <label>Your Name</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="name"
+                                            value={input.name}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Your Contact no</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="contactNo"
+                                            value={input.contactNo}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <label>Select Category</label>
+                                    <select
+                                        name="category"
+                                        value={input.category}
+                                        onChange={handleInputChange}
+                                        class="w-100 form-control mt-lg-1 mt-md-2 mb-4">
+                                        <option>Category</option>
+                                        {
+                                            CATEGORY.map((cat) => {
+                                                return (
+                                                    <option value={cat.id}>{cat.val}</option>
+                                                )
+                                            })
+                                        }
+                                    </select>
+                                    <button
+                                        class="btn btn-success"
+                                        onClick={handleSubmit}
+                                    >
+                                        Apply as a freelancer
+                                    </button>
+
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6">
+                            {/* <div class="col-lg-6 col-md-6">
                                 <div class="widget change-password">
                                     <h3 class="widget-header user">Edit Password</h3>
                                     <form action="#">
@@ -97,7 +158,7 @@ const FreeLance = () => {
                                         <button class="btn btn-transparent">Change email</button>
                                     </form>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
