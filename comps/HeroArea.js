@@ -12,7 +12,7 @@ const HeroArea = () => {
                             <div class="short-popular-category-list text-center">
                             </div>
                         </div>
-                        <div class="advance-search">
+                        {/* <div class="advance-search">
                             <div class="container">
                                 <div class="row justify-content-center">
                                     <div class="col-lg-12 col-md-12 align-content-center">
@@ -46,10 +46,13 @@ const HeroArea = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
+
                     </div>
+                    
                 </div>
             </div>
+            
         </section>
     )
 

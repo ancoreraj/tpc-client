@@ -104,7 +104,8 @@ const AdListing = () => {
                 setUploadPercent(prog);
             },
             (error) =>{
-                toast('Something Error Happened, please try again')
+                toast('Something Error Happened, please try again');
+                setBtnDisable(false);
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -149,6 +150,7 @@ const AdListing = () => {
                         razor.open();
 
                     }catch(err){
+                        setBtnDisable(false);
                         toast('Something error happened, please try again.');
                     }
                 });

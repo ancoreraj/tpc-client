@@ -52,7 +52,7 @@ const Footer = () => {
                                     <p class="mb-0">Get your assignment and notes done.</p>
                                 </div>
                                 <div class="download-btn d-flex my-3">
-                                    <a href="index.html"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" class="img-fluid" alt="" /></a>
+                                    <a href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/thecompleteproject-cbacb.appspot.com/o/TPC.jpg?alt=media&token=2b184488-aa64-474f-bca0-1f655314b8d6" class="img-fluid" alt="" /></a>
                                     
                                 </div>
                             </div>

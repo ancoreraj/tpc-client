@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import axios from "axios";
+import { useDropzone } from 'react-dropzone'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
-
-import { APP_URL, isEmail } from "../comps/constants";
-import { CATEGORY } from "../comps/constants";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { storage } from "./../comps/firebase";
+import { APP_URL, CATEGORY, makeid, RAZORPAY_KEY } from '../comps/constants'
+import { isEmail } from "../comps/constants";
 
 const FreeLance = () => {
     const router = useRouter();
@@ -20,33 +22,76 @@ const FreeLance = () => {
     const [input, setInput] = useState({
         name: '',
         contactNo: '',
-        category: ''
+        category: '',
+        upiId: '',
     })
+    const [aadharCard, setAadharCard] = useState(null);
+    const [uploadPercent, setUploadPercent] = useState(0);
+    const [btnDisable, setBtnDisable] = useState(false);
 
+    const onDrop = useCallback(acceptedFiles => {
+        const file = acceptedFiles[0];
+        if (file.size >= 5 * 1000000) {
+            toast("Please upload file of size less than 5 MB");
+        } else {
+            setAadharCard(acceptedFiles[0])
+        }
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setInput((prevState) => ({ ...prevState, [name]: value }));
     }
 
     const handleSubmit = async () => {
-        const headers = {
-            'Content-Type': 'application/json',
-            'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+        setBtnDisable(true);
+        if (!input.name || !input.category || !input.contactNo || !input.upiId) {
+            toast('Please fill all the fields.');
+            setBtnDisable(false);
+            return;
         }
-        const body = {
-            contactNo: input.contactNo,
-            category: input.category,
-            name: input.name
-        }
+        let userData = JSON.parse(localStorage.getItem('userData'))
+        const sotrageRef = ref(storage, `aadharCard/${userData.email}/${aadharCard.name}-${makeid()}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, aadharCard);
 
-        try{
-            const {data} = await axios.post(`${APP_URL}/add-freelance`, body , {headers});
-            router.push('/');
-            toast('Congratulatins, you are now added as a freelance');
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setUploadPercent(prog);
+            },
+            (error) => {
+                toast('Something Error Happened, please try again')
+                setBtnDisable(false);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+                    }
+                    const body = {
+                        contactNo: input.contactNo,
+                        category: input.category,
+                        name: input.name,
+                        upiId: input.upiId,
+                        aadharCard: downloadURL
+                    }
 
-        }catch(err){
-            toast('Something error happened, please try again.');
-        }
+                    try {
+                        const { data } = await axios.post(`${APP_URL}/add-freelance`, body, { headers });
+                        router.push('/');
+                        toast('Congratulatins, you are now added as a freelance');
+
+                    } catch (err) {
+                        setBtnDisable(false);
+                        toast('Something error happened, please try again.');
+                    }
+                });
+            }
+        );
     }
 
     return (
@@ -73,8 +118,8 @@ const FreeLance = () => {
                     </div> */}
                     <div class="col-lg-8">
                         <div class="widget welcome-message">
-                            <h2>Join us as a <b>Freelancer</b></h2>
-                            <p>Are you a talented freelancer looking for new opportunities? Join our team and work on exciting projects with a dynamic and supportive group of professionals. We offer competitive rates and the opportunity to collaborate with a diverse group of clients. Apply now to become a part of our growing team of freelancers.</p>
+                            <h2>Join us as a <b>Partner</b></h2>
+                            <p>Are you a talented Partner looking for new opportunities? Join our team and work on exciting projects with a dynamic and supportive group of professionals. We offer competitive rates and the opportunity to collaborate with a diverse group of clients. Apply now to become a part of our growing team of freelancers.</p>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
@@ -115,11 +160,40 @@ const FreeLance = () => {
                                             })
                                         }
                                     </select>
+                                    <div class="form-group">
+                                        <label>Your UPI Id</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="upiId"
+                                            value={input.upiId}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <label for="file-upload">
+                                    
+                                            <div {...getRootProps()}>
+                                                <input {...getInputProps()} />
+                                                {aadharCard ?
+                                                    <span style={{ height: '128px' }} class="d-block font-weight-bold text-dark">{aadharCard?.name}</span>
+                                                    :
+                                                    <>
+                                                        <span class="d-block font-weight-bold text-dark">Drop files anywhere to upload</span>
+                                                        <span class="d-block">or</span>
+                                                        <span class="d-block btn bg-primary text-white my-3 select-files">Select Your aadhar card</span>
+                                                        <span class="d-block">Maximum upload file size: 5 MB </span>
+                                                    </>
+                                                }
+
+                                            </div>
+                                        
+                                    </label>
                                     <button
                                         class="btn btn-success"
                                         onClick={handleSubmit}
+                                        disabled={btnDisable}
                                     >
-                                        Apply as a freelancer
+                                        {uploadPercent || ''}{" "}Apply as a freelancer
                                     </button>
 
                                 </div>

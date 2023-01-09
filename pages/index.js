@@ -15,7 +15,7 @@ const products = CATEGORY.map((cat) => ({
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    if(!router) return;
+    if (!router) return;
     let orderPlaced = router.query.orderPlaced
     console.log(orderPlaced)
     if (orderPlaced) {
@@ -31,7 +31,28 @@ export default function Home() {
   return (
     <>
       <HeroArea />
+      <section className='index-video'>
+        <h4 className='text-center mt-5'>How to place order</h4>
+      <div className='video'>
+          <div className='video-container'>
+            <section className='youtube-video'>
+              <iframe id="video" src="https://www.youtube.com/embed/8HcA95Cqf6s?rel=0&controls=0" frameborder="0" allowfullscreen></iframe>
+            </section>
+          </div>
+        </div>
+        <h4 className='text-center mt-3'>How to become partner</h4>
+
+        <div className='video'>
+          <div className='video-container'>
+            <section className='youtube-video'>
+              <iframe id="video" src="https://www.youtube.com/embed/8HcA95Cqf6s?rel=0&controls=0" frameborder="0" allowfullscreen></iframe>
+            </section>
+          </div>
+        </div>
+      </section>
+      
       <section class="popular-deals section bg-gray">
+        
         <div class="container">
           <div class="row">
             <div class="col-md-12">
