@@ -9,6 +9,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <Script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" />
+      <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" />
+
       <Layout>
         <Component {...pageProps} />
       </Layout>

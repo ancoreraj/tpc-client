@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
+import $ from "jquery"
 
 const Header = () => {
     const router = useRouter();
-    const [token, setToken] = useState('');
-
+    const [token, setToken] = useState(''); 
+    const [toggle, setToggle] = useState(true);
+    const [toggleClass, setToggleClass] = useState("collapse navbar-collapse");
     const logout = () => {
         localStorage.clear();
         toast('You are now logged out');
@@ -15,9 +17,20 @@ const Header = () => {
     useEffect(() => {
         let getToken = JSON.parse(localStorage.getItem('token'))
         setToken(getToken);
-    },[logout]);
+    }, [logout]);
 
-    
+    useEffect(()=>{
+        if(toggle){
+            setToggleClass("collapse navbar-collapse");
+        }else{
+            setToggleClass("navbar-collapse");
+        }
+    },[toggle])
+
+    const handleToggle = () => {
+        setToggle(!toggle);
+    }
+
     return (
         <header>
             <div class="container">
@@ -25,13 +38,13 @@ const Header = () => {
                     <div class="col-md-12">
                         <nav class="navbar navbar-expand-lg navbar-light navigation">
                             <a class="navbar-brand" href="/">
-                                <img width={120} src="https://firebasestorage.googleapis.com/v0/b/thecompleteproject-cbacb.appspot.com/o/TPC.jpg?alt=media&token=2b184488-aa64-474f-bca0-1f655314b8d6" alt="" />
+                                <img width={200} src="https://firebasestorage.googleapis.com/v0/b/thecompleteproject-cbacb.appspot.com/o/TPC-logo.png?alt=media&token=e05ac327-1b03-456c-96c4-ef2fc5e8912e" alt="" />
                             </a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            <button onClick={handleToggle} class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <div class={toggleClass} id="navbarSupportedContent">
                                 <ul class="navbar-nav ml-auto main-nav ">
                                     <li class="nav-item @@home">
                                         <a class="nav-link" href="/">Home</a>
@@ -72,7 +85,7 @@ const Header = () => {
                                     {
                                         token ?
                                             (<li class="nav-item">
-                                                <button class="nav-link login-button" onClick={logout}>Logout</button>
+                                                <a class="nav-link login-button" onClick={logout}>Logout</a>
                                             </li>)
                                             :
                                             (<li class="nav-item">
@@ -80,7 +93,7 @@ const Header = () => {
                                             </li>)
                                     }
                                     <li class="nav-item">
-                                        <a class="nav-link text-white add-button" href="/adlisting"><i class="fa fa-plus-circle"></i> Add Listing</a>
+                                        <a class="nav-link text-white add-button" href="/adlisting">Add Listing</a>
                                     </li>
                                 </ul>
                             </div>

@@ -13,7 +13,7 @@ const Footer = () => {
 
                                 {/* <img src="images/logo-footer.png" alt="logo">  */}
 
-                                <p class="alt-color">Welcome to our e-commerce website where you can find a wide range of academic resources including assignments, books, and notes. Whether you're a student looking for study materials or a teacher seeking new curriculum resources, we have something for everyone.</p>
+                                <p class="alt-color">Welcome to our Ed-Tech company where you can find a wide range of academic resources including assignments, books, and notes. Whether you're a student looking for study materials or a teacher seeking new curriculum resources, we have something for everyone.</p>
                             </div>
                         </div>
 
@@ -42,17 +42,11 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        <div class="col-lg-4 col-md-7">
+                        <div class="col-lg-5 col-md-7">
 
                             <div class="block-2 app-promotion">
-                                <div class="mobile d-flex  align-items-center">
-                                    {/* <a href="index.html">
-                                        <img src="images/footer/phone-icon.png" alt="mobile-icon" />
-                                    </a> */}
-                                    <p class="mb-0">Get your assignment and notes done.</p>
-                                </div>
-                                <div class="download-btn d-flex my-3">
-                                    <a href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/thecompleteproject-cbacb.appspot.com/o/TPC.jpg?alt=media&token=2b184488-aa64-474f-bca0-1f655314b8d6" class="img-fluid" alt="" /></a>
+                                <div  class="download-btn d-flex my-1">
+                                    <a href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/thecompleteproject-cbacb.appspot.com/o/TPC-logo.png?alt=media&token=e05ac327-1b03-456c-96c4-ef2fc5e8912e" class="img-fluid" alt="" /></a>
                                     
                                 </div>
                             </div>

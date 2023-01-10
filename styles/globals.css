@@ -956,12 +956,9 @@
 	 padding-right: 10px;
 }
  .footer .block-2 {
-	 padding: 18px 30px;
+	 padding: 18px 18px;
 	 background: #46484a;
 	 border-radius: 2px;
-}
- .footer .block-2.app-promotion {
-	 margin-bottom: 20px;
 }
  .footer .block-2.app-promotion p {
 	 margin-left: 20px;
