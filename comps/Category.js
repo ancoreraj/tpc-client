@@ -3,7 +3,7 @@ const Category = () => {
     return (
 
 
-        <section class=" section">
+        <section class="section">
             <div class="container">
                 <div class="row">
                     <div class="col-12">

@@ -2,7 +2,7 @@
 const Products = ({product}) => {
     return (
         <div class="product-item bg-light">
-            <div class="card" style={{height: '360px'}}>
+            <div class="card" style={{height: '335px'}}>
                 <div class="thumb-content">
                     <div class="price">₹ {product.price}</div>
                     <a href="single.html">
