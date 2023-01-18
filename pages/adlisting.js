@@ -132,7 +132,7 @@ const AdListing = () => {
                             currency: "INR",
                             name: "The Complete Project",
                             order_id: data.razorpayOrder.id,
-                            callback_url: `http://localhost:5000/payment-verification?orderId=${data.orderId}`,
+                            callback_url: `${APP_URL}/payment-verification?orderId=${data.orderId}`,
                             prefill: {
                                 name: address.name,
                                 email: userData.email,
