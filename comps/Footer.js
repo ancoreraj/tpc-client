@@ -65,9 +65,9 @@ const Footer = () => {
                         </div>
                         <div class="col-lg-6">
                             <ul class="social-media-icons text-center text-lg-right">
-                                <li><a class="fa fa-facebook" href="#">Facebook</a></li>
-                                <li><a class="fa fa-twitter" href="#">Twitter</a></li>
-                                <li><a class="fa fa-github-alt" href="#">Instagram</a></li>
+                                <li><a class="fa fa-facebook" href="https://twitter.com/_tpc_edu">Twitter</a></li>
+                                <li><a class="fa fa-twitter" href="https://www.youtube.com/channel/UCdJmXDL8uXV8a-Rc7a3Z-nQ">Youtube</a></li>
+                                <li><a class="fa fa-github-alt" href="https://www.instagram.com/_tpc_com/">Instagram</a></li>
                             </ul>
                         </div>
                     </div>

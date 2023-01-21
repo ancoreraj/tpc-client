@@ -6,11 +6,7 @@ import Category from '../comps/Category'
 import { APP_URL, CATEGORY } from '../comps/constants'
 import { toast } from 'react-toastify'
 
-const products = CATEGORY.map((cat) => ({
-  ...cat,
-  img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
-
-}))
+const products = CATEGORY;
 
 export default function Home() {
   const router = useRouter();
