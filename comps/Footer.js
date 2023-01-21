@@ -42,7 +42,7 @@ const Footer = () => {
                             </div>
                         </div>
 
-                        <div class="col-lg-5 col-md-7">
+                        {/* <div class="col-lg-5 col-md-7">
 
                             <div class="block-2 app-promotion">
                                 <div  class="download-btn d-flex my-1">
@@ -50,7 +50,7 @@ const Footer = () => {
                                     
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
