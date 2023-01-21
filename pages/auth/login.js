@@ -53,7 +53,7 @@ export default function Login() {
             localStorage.setItem('userData', userData)
             localStorage.setItem('token', token)
             
-            toast('You are now logged In')
+            toast('You are now logged In');
             router.push('/')
 
         }catch(err){

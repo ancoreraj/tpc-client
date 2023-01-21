@@ -15,9 +15,9 @@ export default function App({ Component, pageProps }) {
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      <ToastContainer
+      <ToastContainer 
         position="top-right"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -25,7 +25,8 @@ export default function App({ Component, pageProps }) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
+        toastStyle={{ backgroundColor: "#28a745", color: "white" }}
       />
     </>
   )

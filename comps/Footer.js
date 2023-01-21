@@ -65,9 +65,9 @@ const Footer = () => {
                         </div>
                         <div class="col-lg-6">
                             <ul class="social-media-icons text-center text-lg-right">
-                                <li><a class="fa fa-facebook" href="https://www.facebook.com/themefisher">Facebook</a></li>
-                                <li><a class="fa fa-twitter" href="https://www.twitter.com/themefisher">Twitter</a></li>
-                                <li><a class="fa fa-github-alt" href="https://www.github.com/themefisher">Instagram</a></li>
+                                <li><a class="fa fa-facebook" href="#">Facebook</a></li>
+                                <li><a class="fa fa-twitter" href="#">Twitter</a></li>
+                                <li><a class="fa fa-github-alt" href="#">Instagram</a></li>
                             </ul>
                         </div>
                     </div>
