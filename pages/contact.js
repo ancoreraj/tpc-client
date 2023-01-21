@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useRouter } from 'next/router'
 import axios from "axios";
 import { APP_URL } from "../comps/constants";
 import { toast } from 'react-toastify';
@@ -10,6 +11,8 @@ const Contact = () => {
         message: '',
         contactNo: ''
     });
+    const [btnDisable, setBtnDisable] = useState(false);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -17,7 +20,9 @@ const Contact = () => {
     }
 
     const handleSubmit = async () => {
+        setBtnDisable(true);
         if(!input.name || !input.email || !input.message || !input.contactNo){
+            setBtnDisable(false);
             toast('Please fill all the input fields');
             return;
         }
@@ -30,6 +35,10 @@ const Contact = () => {
             })
 
             toast(`Recieved your message, we will get back to you soon`)
+            setBtnDisable(false);
+            setTimeout(() => {
+                router.push('/');
+            }, 500);
         }catch(err){
             toast("Something error happened, please try again.")
         }
@@ -89,7 +98,7 @@ const Contact = () => {
                                     onChange={handleChange}
                                     value={input.message} id="" placeholder="Message *" class="border w-100 p-3 mt-1"></textarea>
                                 <div class="btn-grounp">
-                                    <button onClick={handleSubmit} class="btn btn-success mt-2 float-right">SUBMIT</button>
+                                    <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-success mt-2 float-right">SUBMIT</button>
                                 </div>
                             </fieldset>
 

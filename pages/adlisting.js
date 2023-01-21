@@ -249,6 +249,7 @@ const AdListing = () => {
                             <div>₹ {price}</div>
                         </div>
                     </div>
+                    <div><b><i>You will recieve your order within 8-10 days of your purchase.</i></b></div>
                 </div>
                 <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-success d-block mt-5">{uploadPercent === 0 ? '' : uploadPercent} {' '}Place your order</button>
             </div>

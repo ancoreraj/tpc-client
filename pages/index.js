@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     if (!router) return;
     let orderPlaced = router.query.orderPlaced
-    console.log(orderPlaced)
+
     if (orderPlaced) {
       if (orderPlaced === 'true') {
         toast("Your order is now placed");

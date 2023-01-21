@@ -13,6 +13,7 @@ const Register = () => {
         password: "",
         cPassword: ""
     })
+    const [btnDisable, setBtnDisable] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -20,19 +21,22 @@ const Register = () => {
     }
 
     const handleSubmit = async () => {
-
+        setBtnDisable(true);
         if(!isEmail(input.email)){
-            toast('Enter a valid email id')
+            toast('Enter a valid email id');
+            setBtnDisable(false);
             return;
         }
 
         if(input.password !== input.cPassword){
             toast('Password do not match')
+            setBtnDisable(false);
             return;
         }
 
         if(input.password.length < 8){
-            toast('Password length should be more than 8 characters')
+            toast('Password length should be more than 8 characters');
+            setBtnDisable(false);
             return;
         }
 
@@ -42,11 +46,13 @@ const Register = () => {
                 password: input.password
             })
 
-            toast("You are registered, please verify your email then login.")
-            router.push("/auth/login")
+            toast("You are registered, please verify your email then login.");
+            setBtnDisable(false);
+            router.push("/auth/login?verify=true")
 
         }catch(err) {
-            toast("Something error happened, please try again.")
+            setBtnDisable(false);
+            toast(err);
         }
 
     }
@@ -67,7 +73,7 @@ const Register = () => {
                                         <input type="checkbox" id="registering" className="mt-1" />
                                         <label for="registering" className="px-2">By registering, you accept our <a className="text-primary font-weight-bold" href="terms-condition.html">Terms & Conditions</a></label>
                                     </div> */}
-                                    <button onClick={handleSubmit} className="btn btn-primary font-weight-bold mt-3">Register Now</button>
+                                    <button disabled={btnDisable} onClick={handleSubmit} className="btn btn-primary font-weight-bold mt-3">Register Now</button>
                                 </fieldset>
                             
                         </div>
