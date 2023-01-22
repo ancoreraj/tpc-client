@@ -7,7 +7,7 @@ const HeroArea = () => {
                 <div class="row">
                     <div class="col-md-12">
                         <div class="content-block">
-                            <h1>Complete you Assignment & Projects</h1>
+                            <h1>Complete your Assignment & Projects</h1>
                             <p>Join the millions who complete their projects  everyday in local communities.</p>
                             <div class="short-popular-category-list text-center">
                             </div>

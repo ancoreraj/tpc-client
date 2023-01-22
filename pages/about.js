@@ -22,17 +22,17 @@ const About = () => {
                         <div class="col-lg-6 pt-5 pt-lg-0">
                             <div class="about-content">
                                 <h3 class="font-weight-bold">Introduction</h3>
-                                <p>Welcome to <b>The Project Complete</b>, your one-stop shop for all your written assignment needs. We are a team of experienced writers who are dedicated to helping students and professionals achieve their academic and professional goals.</p>
-                                <h3 class="font-weight-bold">How we can help</h3>
-                                <p>Our mission is to provide high-quality, custom-written assignments that are tailored to meet the unique needs of each of our clients. We understand that every individual has different writing needs, which is why we offer a wide range of services, including essay writing, research paper writing, and thesis writing.
+                                <p>Welcome to <b>The Project Complete</b>, your one-stop shop for all your written assignment needs. We are a team of experienced writers who are dedicated to help students and professionals to achieve their academic and professional goals.</p>
+                                <h3 class="font-weight-bold">How can we help</h3>
+                                <p>Our mission is to provide high-quality, custom-written assignments that are tailored to meet the unique needs of each of our clients.Any person can also be the member of us and can become a partner and can write projects, assignments, and can get a source of income. We understand that every individual has different writing needs, which is why we offer a wide range of services, including essay writing, research paper writing, and thesis writing.
 
-We pride ourselves on our ability to deliver assignments on time and at an affordable price. Our team of experienced writers is dedicated to providing the best service possible, and we are committed to meeting the needs of every client.
+We pride ourselves on our ability to deliver assignments on time and at an affordable price. Our team of experienced writers is dedicated to providing the best service possible, and we are committed to meet the needs of every client.
 
-We understand that students and professionals lead busy lives, which is why we offer a user-friendly ordering process and a dedicated customer support team that is available 24/7 to assist with any questions or concerns.
+We understand that every students and professionals lead busy lives, which is why we offer a user-friendly ordering process and a dedicated customer support team that is available 24/7 to assist with any questions or concerns.
 
-Thank you for choosing <b>The Project Complete</b>  . <br /> We look forward to working with you and helping you achieve your academic and professional goals.
+Thank you for choosing <b>The Project Complete</b>  . <br /> We look forward to work with you and help you to achieve your academic and professional goals.
 
-In this brief description, I've emphasized on the company's mission, services, and the process of ordering and customer support. You can add more information, such as the company's history, awards and recognition, team members and their qualifications, testimonials from satisfied customers, and more.</p>
+In this brief description, We've emphasized on the company's mission, services, and the process of ordering and customer support. You can add more information, such as the company's history, awards and recognition, team members and their qualifications, testimonials from satisfied customers, and more.</p>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,8 @@ In this brief description, I've emphasized on the company's mission, services, a
                             <div class="card my-3 my-lg-0">
                                 {/* <img class="card-img-top img-fluid w-100" src="images/team/team1.jpg" alt="Card image cap" /> */}
                                 <div class="card-body bg-gray text-center">
-                                    <h5 class="card-title">Rahul kaushik</h5>
-                                    <p class="card-text">Founders</p>
+                                    <h5 class="card-title">Rahul Kaushik</h5>
+                                    <p class="card-text">Founder</p>
                                 </div>
                             </div>
                         </div>
