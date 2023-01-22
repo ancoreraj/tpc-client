@@ -18,10 +18,6 @@ const validateInput = (input, address, file) => {
         toast(`Please select correct category`);
         return false;
     }
-    if (!file) {
-        toast(`Please select your file`);
-        return false;
-    }
     const regex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[3456789]\d{9}$/gm
     if(!regex.test(address.number)){
         toast('Enter a correct phone number');
@@ -79,6 +75,7 @@ const AdListing = () => {
         const file = acceptedFiles[0];
         if(file.size >= 15*1000000){
             toast("Please upload file of size less than 15 MB");
+            setBtnDisable(false);
         }else{
             setFile(acceptedFiles[0])
         }
@@ -86,7 +83,7 @@ const AdListing = () => {
 
     const handleSubmit = async () => {
         setBtnDisable(true);
-        if(!validateInput(input,address,file)){
+        if(!validateInput(input,address)){
             setBtnDisable(false);
             return;
         }

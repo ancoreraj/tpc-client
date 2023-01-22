@@ -83,7 +83,7 @@ const FreeLance = () => {
                     try {
                         const { data } = await axios.post(`${APP_URL}/add-freelance`, body, { headers });
                         router.push('/');
-                        toast('Congratulations, you are now added as a freelance');
+                        toast('Congratulations, you are now added as a Partner');
 
                     } catch (err) {
                         setBtnDisable(false);
