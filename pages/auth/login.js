@@ -104,6 +104,8 @@ export default function Login() {
                                     <button disabled={btnDisable} onClick={handleSubmit} class="btn btn-primary font-weight-bold mt-3">Log in</button>
                                     {/* <a class="mt-3 d-block text-primary" href="#!">Forget Password?</a> */}
                                     <div className="mt-2">Don't have an account? <a class="d-inline-block text-primary" href="/auth/register">Sign Up</a></div>
+                                    <div className="mt-2">Forgot Password? <a class="d-inline-block text-primary" href="/auth/resetpassword">Reset Password</a></div>
+
                                    
                                 </fieldset>
                             

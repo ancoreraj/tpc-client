@@ -7,7 +7,7 @@ import { APP_URL, isEmail } from "../../comps/constants";
 
 export default function ResetPassword() {
     const router = useRouter();
-    const [codeView, setCodeView] = useState(true);
+    const [codeView, setCodeView] = useState(false);
 
     const [input, setInput] = useState({
         email: "",
@@ -102,8 +102,6 @@ export default function ResetPassword() {
             toast(err)
         }
     }
-
-    console.log(input2);
 
     return (
         <section class="login py-5 border-top-1">
