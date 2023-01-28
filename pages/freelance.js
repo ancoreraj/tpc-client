@@ -17,7 +17,7 @@ const FreeLance = () => {
             return;
         }
         let user = JSON.parse(localStorage.getItem('userData'));
-        console.log(user);
+
         if(user.isFreelancer){
             toast('You are already added as a Partner');
             router.push('/');
@@ -144,6 +144,9 @@ const FreeLance = () => {
                     try {
                         const { data } = await axios.post(`${APP_URL}/add-freelance`, body, { headers });
                         router.push('/');
+                        const userData = JSON.parse(localStorage.getItem('userData'));
+                        userData.isFreelancer = true;
+                        localStorage.setItem(JSON.stringify(userData));
                         toast('Congratulations, you are now added as a Partner');
 
                     } catch (err) {
