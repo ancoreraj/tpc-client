@@ -13964,3 +13964,6 @@
     text-shadow: 1px 1px #28a745;
 
   }
+ .pointer{
+    cursor: pointer;
+ }

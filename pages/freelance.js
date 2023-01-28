@@ -5,26 +5,58 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./../comps/firebase";
-import { APP_URL, CATEGORY, makeid, RAZORPAY_KEY } from '../comps/constants'
-import { isEmail } from "../comps/constants";
+import { APP_URL, CATEGORY2, makeid } from '../comps/constants'
 
 const FreeLance = () => {
     const router = useRouter();
     useEffect(() => {
         let token = localStorage.getItem('token')
         if (!token) {
-            toast('Please Login before you submit your listing.');
+            toast('Please Login');
             router.push('/auth/login');
+            return;
+        }
+        let user = JSON.parse(localStorage.getItem('userData'));
+        console.log(user);
+        if(user.isFreelancer){
+            toast('You are already added as a Partner');
+            router.push('/');
             return;
         }
     }, []);
 
+    const [price, setPrice] = useState(null);
     const [input, setInput] = useState({
         name: '',
         contactNo: '',
         category: '',
         upiId: '',
+        accountNo: '',
+        confirmAccountNo: '',
+        ifscCode: '',
     })
+    const [address, setAddress] = useState({
+        pincode: '',
+        address: '',
+    })
+
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target
+        setAddress((prevState) => ({ ...prevState, [name]: value }));
+    }
+
+    useEffect(()=>{
+        if(input.category){
+            CATEGORY2.map((cat)=>{
+                if(cat.id === input.category){
+                    setPrice(cat.price);
+                }
+            })
+        }else{
+            setPrice(null);
+        }
+    },[input])
+
     const [aadharCard, setAadharCard] = useState(null);
     const [uploadPercent, setUploadPercent] = useState(0);
     const [btnDisable, setBtnDisable] = useState(false);
@@ -45,11 +77,36 @@ const FreeLance = () => {
 
     const handleSubmit = async () => {
         setBtnDisable(true);
-        if (!input.name || !input.category || !input.contactNo || !input.upiId) {
-            toast('Please fill all the fields.');
+        if (!input.name || 
+            !input.category || 
+            !input.contactNo ||
+            !address.address || 
+            !address.pincode
+        ) {
+            toast('Please fill all the Required fields.');
             setBtnDisable(false);
             return;
         }
+
+        if(!input.upiId && !input.accountNo){
+            toast('User should must add either UPI Id or Account No');
+            setBtnDisable(false);
+            return;
+        }
+
+        if(input.accountNo && input.accountNo !== input.confirmAccountNo){
+            toast('Please Enter correct confirm account no.');
+            setBtnDisable(false);
+            return;
+        }
+
+        if(input.accountNo && !input.ifscCode){
+            toast('Please Enter ifsc code');
+            setBtnDisable(false);
+            return;
+        }
+
+
         let userData = JSON.parse(localStorage.getItem('userData'))
         const sotrageRef = ref(storage, `aadharCard/${userData.email}/${aadharCard.name}-${makeid()}`);
         const uploadTask = uploadBytesResumable(sotrageRef, aadharCard);
@@ -77,8 +134,12 @@ const FreeLance = () => {
                         category: input.category,
                         name: input.name,
                         upiId: input.upiId,
-                        aadharCard: downloadURL
-                    }
+                        aadharCard: downloadURL,
+                        pincode: address.pincode,
+                        address: address.address,
+                        accountNo: input.accountNo,
+                        ifscCode: input.ifscCode
+                    }   
 
                     try {
                         const { data } = await axios.post(`${APP_URL}/add-freelance`, body, { headers });
@@ -98,24 +159,6 @@ const FreeLance = () => {
         <section class="user-profile section">
             <div class="container">
                 <div class="row">
-                    {/* <div class="col-lg-4">
-                        <div class="sidebar">
-                            <div class="widget user">
-                                <div class="image d-flex justify-content-center">
-                                    <img src="images/user/user-thumb.jpg" alt="" class="" />
-                                </div>
-                                <h5 class="text-center">Samanta Doe</h5>
-                            </div>
-                            <div class="widget user-dashboard-menu">
-                                <ul>
-                                    <li><a href="index.html">Savings Dashboard</a></li>
-                                    <li><a href="index.html">Saved Offer <span>(5)</span></a></li>
-                                    <li><a href="index.html">Favourite Stores <span>(3)</span></a></li>
-                                    <li><a href="index.html">Recommended</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div> */}
                     <div class="col-lg-8">
                         <div class="widget welcome-message">
                             <h2>Join us as a <b>Partner</b></h2>
@@ -127,7 +170,7 @@ const FreeLance = () => {
                                 <div class="widget personal-info">
                                     <h3 class="widget-header user">Add Personal Information</h3>
                                     <div class="form-group">
-                                        <label>Your Name</label>
+                                        <label>Your Name *</label>
                                         <input
                                             type="text"
                                             class="form-control"
@@ -137,7 +180,7 @@ const FreeLance = () => {
                                         />
                                     </div>
                                     <div class="form-group">
-                                        <label>Your Contact no</label>
+                                        <label>Your Contact no *</label>
                                         <input
                                             type="text"
                                             class="form-control"
@@ -146,15 +189,15 @@ const FreeLance = () => {
                                             onChange={handleInputChange}
                                         />
                                     </div>
-                                    <label>Select Category</label>
+                                    <label>Select Category *</label>
                                     <select
                                         name="category"
                                         value={input.category}
                                         onChange={handleInputChange}
                                         class="w-100 form-control mt-lg-1 mt-md-2 mb-4">
-                                        <option>Category</option>
+                                        <option value="">Category</option>
                                         {
-                                            CATEGORY.map((cat) => {
+                                            CATEGORY2.map((cat) => {
                                                 return (
                                                     <option value={cat.id}>{cat.val}</option>
                                                 )
@@ -168,6 +211,36 @@ const FreeLance = () => {
                                             class="form-control"
                                             name="upiId"
                                             value={input.upiId}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Account No</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="accountNo"
+                                            value={input.accountNo}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm Account No</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="confirmAccountNo"
+                                            value={input.confirmAccountNo}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>IFSC Code</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="ifscCode"
+                                            value={input.ifscCode}
                                             onChange={handleInputChange}
                                         />
                                     </div>
@@ -189,6 +262,20 @@ const FreeLance = () => {
                                             </div>
                                         
                                     </label>
+                                    <fieldset class="py-4 seller-information">
+                                        <div class="">
+                                            <div class="">
+                                                <h3>Contact Address</h3>
+                                            </div>
+                                            <div class="">
+                                                <h6 class="font-weight-bold pt-4 pb-1">Pincode *</h6>
+                                                <input name='pincode' value={address.pincode} onChange={handleAddressChange} type="text" placeholder="XX-XX-XX" class="form-control bg-white" required />
+                                                <h6 class="font-weight-bold pt-4 pb-1">Contact Address *</h6>
+                                                <input name='address' value={address.address} onChange={handleAddressChange} type="text" placeholder="Enter your full delivery address" class="form-control bg-white" required />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    { price ? <i><div className="mt-2 mb-1">You will recieve <b>₹ {price}</b> after completing each task.</div></i> : ''}
                                     <button
                                         class="btn btn-success"
                                         onClick={handleSubmit}
@@ -199,42 +286,6 @@ const FreeLance = () => {
 
                                 </div>
                             </div>
-                            {/* <div class="col-lg-6 col-md-6">
-                                <div class="widget change-password">
-                                    <h3 class="widget-header user">Edit Password</h3>
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="current-password">Current Password</label>
-                                            <input type="password" class="form-control" id="current-password" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="new-password">New Password</label>
-                                            <input type="password" class="form-control" id="new-password" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="confirm-password">Confirm New Password</label>
-                                            <input type="password" class="form-control" id="confirm-password" />
-                                        </div>
-                                        <button class="btn btn-transparent">Change Password</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="widget change-email mb-0">
-                                    <h3 class="widget-header user">Edit Email Address</h3>
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="current-email">Current Email</label>
-                                            <input type="email" class="form-control" id="current-email" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="new-email">New email</label>
-                                            <input type="email" class="form-control" id="new-email" />
-                                        </div>
-                                        <button class="btn btn-transparent">Change email</button>
-                                    </form>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>

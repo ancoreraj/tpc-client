@@ -29,6 +29,10 @@ const validateInput = (input, address, file) => {
         return false;
     }
 
+    if(!file){
+        toast('Please select a file to upload');
+        return false;
+    }
     return true;
 }
 
@@ -83,7 +87,7 @@ const AdListing = () => {
 
     const handleSubmit = async () => {
         setBtnDisable(true);
-        if(!validateInput(input,address)){
+        if(!validateInput(input,address,file)){
             setBtnDisable(false);
             return;
         }
@@ -232,7 +236,7 @@ const AdListing = () => {
                             <input name='number' value={address.number} onChange={handleAddressChange} type="text" placeholder="Enter your contact number" class="form-control bg-white" required />
                         </div>
                         <div class="col-lg-6">
-                            <h6 class="font-weight-bold pt-4 pb-1">Contact Pincode</h6>
+                            <h6 class="font-weight-bold pt-4 pb-1">Pincode</h6>
                             <input name='pincode' value={address.pincode} onChange={handleAddressChange} type="text" placeholder="XX-XX-XX" class="form-control bg-white" required />
                             <h6 class="font-weight-bold pt-4 pb-1">Contact Address:</h6>
                             <input name='address' value={address.address} onChange={handleAddressChange} type="text" placeholder="Enter your full delivery address" class="form-control bg-white" required />

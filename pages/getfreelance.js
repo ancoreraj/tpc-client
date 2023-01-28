@@ -3,12 +3,15 @@ import axios from "axios";
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 
-import { APP_URL, isEmail } from "../comps/constants";
+import { APP_URL } from "../comps/constants";
 import { CATEGORY } from "../comps/constants";
 
 const GetFreelance = () => {
     const router = useRouter();
+    const [idx, setIdx] = useState(-1);
     const [freelancer, setFreelancer] = useState([]);
+    const [orderId, setOrderId] = useState('');
+    const [btnDisable, setBtnDisable] = useState(false);
 
     useEffect(() => {
         async function getData() {
@@ -28,6 +31,42 @@ const GetFreelance = () => {
         return category;
     }
 
+    const handleClick = (idx) => {
+        setIdx(idx);
+    }
+
+    const handleSendOrder = async (user) => {
+        setBtnDisable(true);
+        if(orderId.length === 0){
+            toast('Please Enter the OrderId');
+            setBtnDisable(false)
+            return;
+        }
+        const body = {
+            orderId: orderId,
+            category: user.category,
+            email: user.email,
+        }
+
+        try{
+            const {data} = await axios.post(`${APP_URL}/set-freelance`, body);
+
+            if(!data.check){
+                setBtnDisable(false);
+                toast(data.msg);
+                return;
+            }
+
+            toast(data.msg);
+            setBtnDisable(false);
+            setIdx(-1);
+            setOrderId('');
+            
+        }catch(err){
+
+        }
+    }
+    console.log(orderId);
     return (
         <section class="user-profile section">
             <div class="container">
@@ -45,9 +84,28 @@ const GetFreelance = () => {
                                                 <li><b>Email: </b>{user.email}</li>
                                                 <li><b>ContactNo: </b>{user.contactNo}</li>
                                                 <li><b>Category: </b>{getCategory(user)}</li>
+                                                <li><b>UpiId: </b>{user.upiId}</li>
+                                                <li><b>Account No: </b>{user.accountNo}</li>
+                                                <li><b>Ifsc Code: </b>{user.ifscCode}</li>
+                                                <li><b>Aadhar Card: </b><a href={user.aadharCard} target="_blank">Link</a></li>
+                                                <li><b>Pincode: </b>{user.pincode}</li>
+                                                <li><b>Address: </b>{user.address}</li>
+                                                {index !== idx && <li><button onClick={() => handleClick(index)} className="mt-3 nav-link text-white add-button p-2">Select</button></li>}
+                                                {index === idx && 
+                                                    <li>
+                                                    <input 
+                                                        type="text" 
+                                                        class="form-control mt-3" 
+                                                        placeholder="Enter Order Id"
+                                                        value={orderId}
+                                                        onChange={(e) => setOrderId(e.target.value)}
+                                                    />
+                                                    <button disabled={btnDisable} onClick={() => handleSendOrder(user)} className="mt-3 btn btn-success">Add Partner to order</button>
+                                                    </li>
+                                                }
                                             </ul>
                                         </>
-                                    )
+                                    ) 
 
                                 })
                             }
