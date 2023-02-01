@@ -168,7 +168,6 @@ const FreeLance = () => {
                         <div class="widget welcome-message">
                             <h2>Join us as a <b>Partner</b></h2>
                             <p>Are you a talented Partner looking for new opportunities? Join our team and work on exciting projects with a dynamic and supportive group of professionals. We offer competitive rates and the opportunity to collaborate with a diverse group of clients. Apply now to become a part of our growing team of freelancers.</p>
-                            <div><b><i>You will recieve 50% of the listing price after completing the task.</i></b></div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
