@@ -5,31 +5,39 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./../comps/firebase";
-import { APP_URL, CATEGORY2, makeid } from '../comps/constants'
+import { APP_URL, CATEGORY2, makeid, FREELANCE_CATEGORY } from '../comps/constants'
+
+const F_C_I = FREELANCE_CATEGORY.map((cat) =>{
+    return {
+        id: cat.id,
+        val: cat.val,
+        checked: false,
+        price: cat.price,
+    }
+});
 
 const FreeLance = () => {
     const router = useRouter();
-    useEffect(() => {
-        let token = localStorage.getItem('token')
-        if (!token) {
-            toast('Please Login');
-            router.push('/auth/login');
-            return;
-        }
-        let user = JSON.parse(localStorage.getItem('userData'));
+    // useEffect(() => {
+    //     let token = localStorage.getItem('token')
+    //     if (!token) {
+    //         toast('Please Login');
+    //         router.push('/auth/login');
+    //         return;
+    //     }
+    //     let user = JSON.parse(localStorage.getItem('userData'));
 
-        if(user.isFreelancer){
-            toast('You are already added as a Partner');
-            router.push('/');
-            return;
-        }
-    }, []);
+    //     if(user.isFreelancer){
+    //         toast('You are already added as a Partner');
+    //         router.push('/');
+    //         return;
+    //     }
+    // }, []);
 
     const [price, setPrice] = useState(null);
     const [input, setInput] = useState({
         name: '',
         contactNo: '',
-        category: '',
         upiId: '',
         accountNo: '',
         confirmAccountNo: '',
@@ -39,23 +47,30 @@ const FreeLance = () => {
         pincode: '',
         address: '',
     })
+    const [freelanceCategory, setFreelanceCategory] = useState(F_C_I);
+
+    const handleCategoryChange = (e, id) => {
+        const tempArr = [...freelanceCategory];
+        tempArr[id].checked = e.target.checked;
+        setFreelanceCategory(tempArr);
+    }
 
     const handleAddressChange = (e) => {
         const { name, value } = e.target
         setAddress((prevState) => ({ ...prevState, [name]: value }));
     }
 
-    useEffect(()=>{
-        if(input.category){
-            CATEGORY2.map((cat)=>{
-                if(cat.id === input.category){
-                    setPrice(cat.price);
-                }
-            })
-        }else{
-            setPrice(null);
-        }
-    },[input])
+    // useEffect(()=>{
+    //     if(input.category){
+    //         CATEGORY2.map((cat)=>{
+    //             if(cat.id === input.category){
+    //                 setPrice(cat.price);
+    //             }
+    //         })
+    //     }else{
+    //         setPrice(null);
+    //     }
+    // },[input])
 
     const [aadharCard, setAadharCard] = useState(null);
     const [uploadPercent, setUploadPercent] = useState(0);
@@ -75,10 +90,18 @@ const FreeLance = () => {
         setInput((prevState) => ({ ...prevState, [name]: value }));
     }
 
+    // let temp = []
+    // freelanceCategory.map((cat)=> {
+    //     if(cat.checked){
+    //         temp.push(cat.id);
+    //     }
+    // })
+    
+    // console.log(temp);
+
     const handleSubmit = async () => {
         setBtnDisable(true);
-        if (!input.name || 
-            !input.category || 
+        if (!input.name ||  
             !input.contactNo ||
             !address.address || 
             !address.pincode
@@ -106,6 +129,31 @@ const FreeLance = () => {
             return;
         }
 
+        if(!aadharCard){
+            toast('Please Upload your Aadhar Card');
+            setBtnDisable(false);
+            return;
+        }
+
+        let checkCategory = false;
+        freelanceCategory.map((cat) => {
+            if(cat.checked){
+                checkCategory = true;
+            }
+        })
+
+        let checkedCategoryArr = []
+        if(!checkCategory) {
+            toast('Please Check atlease one category');
+            setBtnDisable(false);
+            return;
+        }else{
+            freelanceCategory.map((cat)=> {
+                if(cat.checked){
+                    checkedCategoryArr.push(cat.id);
+                }
+            })
+        }
 
         let userData = JSON.parse(localStorage.getItem('userData'))
         const sotrageRef = ref(storage, `aadharCard/${userData.email}/${aadharCard.name}-${makeid()}`);
@@ -131,7 +179,7 @@ const FreeLance = () => {
                     }
                     const body = {
                         contactNo: input.contactNo,
-                        category: input.category,
+                        category: checkedCategoryArr,
                         name: input.name,
                         upiId: input.upiId,
                         aadharCard: downloadURL,
@@ -194,7 +242,7 @@ const FreeLance = () => {
                                         />
                                     </div>
                                     <label>Select Category *</label>
-                                    <select
+                                    {/* <select
                                         name="category"
                                         value={input.category}
                                         onChange={handleInputChange}
@@ -207,7 +255,28 @@ const FreeLance = () => {
                                                 )
                                             })
                                         }
-                                    </select>
+                                    </select> */}
+                                    <div class="freelance-checkbox">
+                                    {
+                                        freelanceCategory.map((cat, index) => {
+                                            return (
+                                                <div className="d-flex p-1">
+                                                    <input 
+                                                        id={index+1}
+                                                        type="checkbox"
+                                                        checked={freelanceCategory[index].checked}
+                                                        onChange={(e) => handleCategoryChange(e, index)}
+                                                    />
+                                                    <label for={index+1}><b>{cat.val}</b></label>
+                                                    <p className="ml-3 mb-0">₹ {cat.price}</p>
+                                                </div>
+                                            )
+                                            
+                                        })
+                                    }
+                                    
+                                        </div>
+                                    
                                     <div class="form-group">
                                         <label>Your UPI Id</label>
                                         <input

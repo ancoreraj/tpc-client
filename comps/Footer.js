@@ -35,7 +35,7 @@ const Footer = () => {
                                 <h4>Navigate</h4>
                                 <ul>
                                     <li><a href="/adlisting">Add Listing</a></li>
-                                    <li><a href="/freelance">Partner</a></li>
+                                    <li><a href="/freelance">Freelance</a></li>
                                     <li><a href="/about">About Us</a></li>
                                     <li><a href="/contact">Contact Us</a></li>
                                 </ul>

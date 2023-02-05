@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 
 import { APP_URL } from "../comps/constants";
-import { CATEGORY } from "../comps/constants";
+import { CATEGORY, FREELANCE_CATEGORY } from "../comps/constants";
 
 const GetFreelance = () => {
     const router = useRouter();
@@ -21,14 +21,19 @@ const GetFreelance = () => {
         getData();
     }, [])
 
+
     const getCategory = (user) => {
-        let category;
-        CATEGORY.map((cat) => {
-            if (cat.id === user.category) {
-                category = cat.val;
-            }
+        let category = [];
+        let userCategory = user.category;
+        userCategory = userCategory.split(",");
+        FREELANCE_CATEGORY.map((cat) => {
+            userCategory.map((id) => {
+                if(cat.id === id){
+                    category.push(cat.val);
+                }
+            })
         })
-        return category;
+        return category.join(", ");
     }
 
     const handleClick = (idx) => {
@@ -66,7 +71,7 @@ const GetFreelance = () => {
 
         }
     }
-    console.log(orderId);
+
     return (
         <section class="user-profile section">
             <div class="container">

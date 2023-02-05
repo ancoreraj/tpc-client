@@ -71,7 +71,7 @@ const Header = () => {
                                         </ul>
                                     </li> */}
                                     <li class="nav-item @@home">
-                                        <a class="nav-link" href="/freelance">Partner</a>
+                                        <a class="nav-link" href="/freelance">Freelance</a>
                                     </li>
                                     <li class="nav-item @@home">
                                         <a class="nav-link" href="/about">About Us</a>
