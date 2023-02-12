@@ -41,7 +41,7 @@ const Category = () => {
                                     <div class="category-block">
                                         <div class="header">
                                             <i class="fa fa-shopping-basket icon-bg-4"></i>
-                                            <h4>Books</h4>
+                                            <h4>Courses</h4>
                                         </div>
                                     </div>
                                 </a>
