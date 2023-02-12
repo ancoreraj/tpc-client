@@ -13979,3 +13979,10 @@
  .freelance-checkbox label{
     font-size: 16px;
 }
+
+.coming-soon-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
