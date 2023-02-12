@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./../comps/firebase";
-import { APP_URL, CATEGORY2, makeid, FREELANCE_CATEGORY } from '../comps/constants'
+import { APP_URL, CATEGORY2, makeid, FREELANCE_CATEGORY } from '../comps/constants';
 
 const F_C_I = FREELANCE_CATEGORY.map((cat) =>{
     return {
@@ -18,27 +18,28 @@ const F_C_I = FREELANCE_CATEGORY.map((cat) =>{
 
 const FreeLance = () => {
     const router = useRouter();
-    useEffect(() => {
-        let token = localStorage.getItem('token')
-        if (!token) {
-            toast('Please Login');
-            router.push('/auth/login');
-            return;
-        }
-        let user = JSON.parse(localStorage.getItem('userData'));
+    // useEffect(() => {
+    //     let token = localStorage.getItem('token')
+    //     if (!token) {
+    //         toast('Please Login');
+    //         router.push('/auth/login');
+    //         return;
+    //     }
+    //     let user = JSON.parse(localStorage.getItem('userData'));
 
-        if(user.isFreelancer){
-            toast('You are already added as a Partner');
-            router.push('/');
-            return;
-        }
-    }, []);
+    //     if(user.isFreelancer){
+    //         toast('You are already added as a Partner');
+    //         router.push('/');
+    //         return;
+    //     }
+    // }, []);
 
     const [price, setPrice] = useState(null);
     const [input, setInput] = useState({
         name: '',
         contactNo: '',
         upiId: '',
+        accountName: '',
         accountNo: '',
         confirmAccountNo: '',
         ifscCode: '',
@@ -176,6 +177,7 @@ const FreeLance = () => {
                         aadharCard: downloadURL,
                         pincode: address.pincode,
                         address: address.address,
+                        accountName: input.accountName,
                         accountNo: input.accountNo,
                         ifscCode: input.ifscCode
                     }   
@@ -275,6 +277,16 @@ const FreeLance = () => {
                                             class="form-control"
                                             name="upiId"
                                             value={input.upiId}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Account Name</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="accountName"
+                                            value={input.accountName}
                                             onChange={handleInputChange}
                                         />
                                     </div>
