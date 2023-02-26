@@ -2,8 +2,9 @@ import { useState, useEffect } from "react"
 import axios from "axios";
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify';
+import dayjs from "dayjs";
 
-import { APP_URL, isEmail } from "../../comps/constants";
+import { APP_URL } from "../../comps/constants";
 import { CATEGORY } from "../../comps/constants";
 
 const convertToDDMMYYHHMM = (time) => {
@@ -34,7 +35,6 @@ const Profile = () => {
         getData();
     }, [])
 
-    console.log(orders);
     const getCategory = (user) => {
         let category;
         CATEGORY.map((cat) => {
@@ -43,6 +43,33 @@ const Profile = () => {
             }
         })
         return category;
+    }
+
+    const handleCancelOrder = async (index) => {
+        const currOrder = orders[index];
+        const orderCreatedAt = dayjs(currOrder.createdAt);
+        const todaysDate = dayjs();
+        const diffOfDays = todaysDate.diff(orderCreatedAt, 'day');
+        
+        if(diffOfDays > 2){
+            toast('You cannot cancel order after two days of listing');
+            return;
+        }else{
+            toast('Your order is now canceled, you will soon recieve the update');
+        }
+
+        // const headers = {
+        //     'Content-Type': 'application/json',
+        //     'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+        // }
+
+        // try{
+        //     const { data } = await axios.get(`${APP_URL}/cancel-order/${currOrder._id}`)
+        //     console.log(data);
+        // }catch(err){
+        //     toast('Something error happened, please try again.');
+
+        // }
     }
 
     return (
@@ -67,9 +94,7 @@ const Profile = () => {
                                                 <li><b>Address: </b>{order.address}</li>
                                                 <li><b>Orderd At: </b>{convertToDDMMYYHHMM(order.createdAt)}</li>
                                                 <li><b>Amount Paid: </b>{order.price}</li>
-
-                                                
-
+                                                <li><button className="btn btn-success mt-3" onClick={() => handleCancelOrder(index)}>Cancel Order</button></li>
                                             </ul>
                                         </>
                                     )

@@ -184,7 +184,6 @@ const FreeLance = () => {
 
                     try {
                         const { data } = await axios.post(`${APP_URL}/add-freelance`, body, { headers });
-                        console.log(data);
                         const userData = JSON.parse(localStorage.getItem('userData'));
                         userData.isFreelancer = true;
                         localStorage.setItem('userData', JSON.stringify(userData))
