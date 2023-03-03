@@ -54,22 +54,26 @@ const Profile = () => {
         if(diffOfDays > 2){
             toast('You cannot cancel order after two days of listing');
             return;
-        }else{
-            toast('Your order is now canceled, you will soon recieve the update');
         }
 
-        // const headers = {
-        //     'Content-Type': 'application/json',
-        //     'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
-        // }
+        const headers = {
+            'Content-Type': 'application/json',
+            'authorization': `Token ${JSON.parse(localStorage.getItem('token'))}`
+        }
 
-        // try{
-        //     const { data } = await axios.get(`${APP_URL}/cancel-order/${currOrder._id}`)
-        //     console.log(data);
-        // }catch(err){
-        //     toast('Something error happened, please try again.');
+        try{
+            const { data } = await axios.get(`${APP_URL}/cancel-order/${currOrder._id}`, {headers})
 
-        // }
+            if(!data.check){
+                toast(data.msg);
+            }
+
+            toast('Your order is now canceled, you will soon recieve the update');
+            window.location.reload();
+        }catch(err){
+            toast('Something error happened, please try again.');
+
+        }
     }
 
     return (
@@ -94,11 +98,11 @@ const Profile = () => {
                                                 <li><b>Address: </b>{order.address}</li>
                                                 <li><b>Orderd At: </b>{convertToDDMMYYHHMM(order.createdAt)}</li>
                                                 <li><b>Amount Paid: </b>{order.price}</li>
-                                                <li><button className="btn btn-success mt-3" onClick={() => handleCancelOrder(index)}>Cancel Order</button></li>
+                                                {order?.isCanceled && <li className="text-danger"><i>Order canceled</i></li>}
+                                                <li><button disabled={order?.isCanceled} className="btn btn-success mt-3" onClick={() => handleCancelOrder(index)}>Cancel Order</button></li>
                                             </ul>
                                         </>
                                     )
-
                                 }) 
                                 :
                                 <div>No Orders</div>

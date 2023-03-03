@@ -18,21 +18,21 @@ const F_C_I = FREELANCE_CATEGORY.map((cat) =>{
 
 const FreeLance = () => {
     const router = useRouter();
-    // useEffect(() => {
-    //     let token = localStorage.getItem('token')
-    //     if (!token) {
-    //         toast('Please Login');
-    //         router.push('/auth/login');
-    //         return;
-    //     }
-    //     let user = JSON.parse(localStorage.getItem('userData'));
+    useEffect(() => {
+        let token = localStorage.getItem('token')
+        if (!token) {
+            toast('Please Login');
+            router.push('/auth/login');
+            return;
+        }
+        let user = JSON.parse(localStorage.getItem('userData'));
 
-    //     if(user.isFreelancer){
-    //         toast('You are already added as a Partner');
-    //         router.push('/');
-    //         return;
-    //     }
-    // }, []);
+        if(user.isFreelancer){
+            toast('You are already added as a Partner');
+            router.push('/');
+            return;
+        }
+    }, []);
 
     const [price, setPrice] = useState(null);
     const [input, setInput] = useState({
