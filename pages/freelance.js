@@ -68,6 +68,8 @@ const FreeLance = () => {
             }
             getUserData();
 
+        }else{
+            setIsLoading(false);
         }
     }, []);
 
@@ -470,6 +472,20 @@ const FreeLance = () => {
                                                 />
                                             </div> :
                                             <li className="mb-2"><b>Address: </b>{userData.address}</li>
+                                    }
+                                    {
+                                        isEdit ?
+                                            <div class="form-group">
+                                                <label>Your Account Name. *</label>
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="accountName"
+                                                    value={editData.accountName}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </div> :
+                                            <li className="mb-2"><b>Account Name: </b>{userData.accountName}</li>
                                     }
                                     {
                                         isEdit ?
