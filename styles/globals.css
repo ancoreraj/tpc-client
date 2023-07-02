@@ -13986,3 +13986,16 @@
     align-items: center;
     height: 70vh;
 }
+
+.freelance-edit{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.freelance-edit svg{
+    cursor: pointer;
+}
+.freelance-edit-cont input{
+    max-width: 300px;
+}
