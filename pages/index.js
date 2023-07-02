@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </section>
       <Category />
-      <section className='index-video'>
+      {/* <section className='index-video'>
         <h4 className='text-center'>How to place order</h4>
         <div className='video'>
           <div className='video-container'>
@@ -74,7 +74,7 @@ export default function Home() {
             </section>
           </div>
         </div>
-      </section>
+      </section> */}
       <section class="call-to-action overly bg-3 section-sm">
         <div class="container">
           <div class="row justify-content-md-center text-center">
