@@ -44,12 +44,14 @@ const FreeLance = () => {
         upiId: "",
         contactNo: "",
     })
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         let token = localStorage.getItem('token')
         if (!token) {
             toast('Please Login');
             router.push('/auth/login');
+            setIsLoading(false);
             return;
         }
         let user = JSON.parse(localStorage.getItem('userData'));
@@ -62,6 +64,7 @@ const FreeLance = () => {
             async function getUserData() {
                 const { data } = await axios.get(`${APP_URL}/auth/me`, { headers });
                 setUserData(data);
+                setIsLoading(false);
             }
             getUserData();
 
@@ -245,7 +248,7 @@ const FreeLance = () => {
 
     return (
         <section class="user-profile section">
-            {!userData.isFreelancer ?
+            {!userData.isFreelancer && !isLoading ?
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-8">
@@ -409,7 +412,7 @@ const FreeLance = () => {
                         </div>
                     </div>
                 </div> :
-                <div class="container">
+                !isLoading ? <div class="container">
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="widget welcome-message">
@@ -546,7 +549,10 @@ const FreeLance = () => {
 
                         </div>
                     </div>
-                </div>
+                </div> : ""
+            }
+            {
+                isLoading ? <div className="p-5">Loading...</div> : ""
             }
         </section>
     )
